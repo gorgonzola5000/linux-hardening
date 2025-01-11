@@ -1,0 +1,5 @@
+---
+- name: Harden hosts
+  hosts: all
+  roles:
+    - unattended_upgrades
