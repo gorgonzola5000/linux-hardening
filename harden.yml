@@ -1,5 +1,9 @@
 ---
 - name: Harden hosts
   hosts: all
+  become: true
   roles:
     - unattended_upgrades
+    - sshd
+    - user_access
+    - firewalld

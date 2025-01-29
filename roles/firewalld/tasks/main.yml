@@ -1,0 +1,18 @@
+---
+- name: Install firewalld
+  ansible.builtin.apt:
+    name: firewalld
+    state: present
+
+- name: Set internal zone
+  ansible.posix.firewalld:
+    source: 192.168.122.0/24
+    zone: internal
+    state: enabled
+    permanent: true
+
+- name: Enable ssh for the internal zone
+  ansible.posix.firewalld:
+    service: ssh
+    state: enabled
+    permanent: true

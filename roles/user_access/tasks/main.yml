@@ -1,0 +1,34 @@
+---
+- name: Ensure sudo is installed
+  ansible.builtin.package:
+    name:
+      - sudo
+    state: present
+
+- name: Ensure group "sudo" exists
+  ansible.builtin.group:
+    name: sudo
+    state: present
+
+- name: "Ensure existance of user {{ vault_admin_username }}"
+  ansible.builtin.user:
+    name: "{{ vault_admin_username }}"
+    shell: '/bin/bash'
+    create_home: true
+    groups:
+      - sudo
+    append: true
+    password: "{{ vault_admin_hashed_password }}"
+
+- name: Check if public ssh key is present in authorized_keys
+  ansible.posix.authorized_key:
+    user: "{{ vault_admin_username }}"
+    state: present
+    key: "{{ vault_admin_public_key }}"
+
+- name: Set root password
+  ansible.builtin.user:
+    name: root
+    shell: '/bin/bash'
+    create_home: true
+    password: "{{ vault_admin_hashed_password }}"
